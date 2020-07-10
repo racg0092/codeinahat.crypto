@@ -1,0 +1,20 @@
+{
+  "name": "@codeinahat/crypto",
+  "version": "1.0.0",
+  "description": "JS crypto Library",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "keywords": [
+    "Library",
+    "JS",
+    "Module"
+  ],
+  "author": "Richard Chapman Gomez",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
