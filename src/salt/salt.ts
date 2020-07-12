@@ -1,11 +1,9 @@
-import { Range } from './models/range.model';
 import { SaltResult } from './models/salt.result';
 import { Utilities } from '../core';
 export class Salt {
     salt: SaltResult;
     keyLength: number = 10;
-    range: Range = {beg: 0, end: 26};
-    isarray: boolean = true;
+    range = {beg: 0, end: 26};
     /**
      * Constructor of Salt class.
      */
@@ -18,7 +16,7 @@ export class Salt {
      * @param keyLength the length of the array or string
      * @param range diversity of characters
      */
-    generate(keyLength: number, range: Range) {
+    generate(keyLength: number, range: {beg: number, end:number}) {
         this.keyLength = keyLength;
         this.range = range;
         this.validation();  
@@ -44,7 +42,5 @@ export class Salt {
             10 : this.keyLength;
         this.range = this.range === undefined || this.keyLength === null ?
             {beg: 0, end: 26} : this.range;
-        this.isarray = this.isarray === undefined || this.isarray === null ?
-            true : false;
     }
 }
