@@ -36,13 +36,17 @@ export class KeyAndSequence {
      * Encrypst Values in an array and returns key and sequence.
      * @param keyRing an array on any type
      */
-    encrypt(keyRing: any[]): KeyAndSequenceResult {
+    encrypt(keyRing: any[] | string): KeyAndSequenceResult {
         let newkeyRing = [];
         let sequence = [];
         if (this.onetimepad) this.newEquationValues();
         for(let key of keyRing) {
             let value;
-            if (isNaN(key)) {
+            if(key === ' ') {
+                value = key;
+                sequence.push('c');
+            }
+            else if (isNaN(key)) {
                 value = key.charCodeAt(0);
                 sequence.push('c')
             }
@@ -67,7 +71,9 @@ export class KeyAndSequence {
         for(let x = 0; x < keyRing.length; x++) {
             let value;
             let key = keyRing[x];
-            if(sequence[x] === 'c') {
+            if (key === ' ')
+                value = key;
+            else if(sequence[x] === 'c') {
                 value = this.equation(key, 'decrypt');
                 value = String.fromCharCode(value);
             }

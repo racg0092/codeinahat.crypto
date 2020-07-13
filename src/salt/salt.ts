@@ -1,4 +1,3 @@
-import { SaltResult } from './models/salt.result';
 import { Utilities } from '../core';
 export class Salt {
     /**
@@ -6,7 +5,7 @@ export class Salt {
      * @src is the sting value of the salt result.
      * @arr is the array value of the salt result.
      */
-    salt: SaltResult;
+    salt: string;
     /**
      * keyLength is the what determines how long the key is going to be.
      * The default value is 10.
@@ -26,7 +25,7 @@ export class Salt {
      * Constructor of Salt class.
      */
     constructor() {
-        this.salt = new SaltResult();
+        //this.salt = new SaltResult();
     }
 
     /**
@@ -34,7 +33,7 @@ export class Salt {
      * @param keyLength the length of the array or string (defaults to 10)
      * @param range diversity of characters (defaults to {beg: 0 , end: 26})
      */
-    generate(keyLength: number, range: {beg: number, end:number}) {
+    generate(keyLength: number, range: {beg: number, end:number}): string {
         this.keyLength = keyLength;
         this.range = range;
         this.validation();  
@@ -47,12 +46,11 @@ export class Salt {
             keyRing.push(Utilities.characterNumber(random));
             counter++
         }
-        this.salt.arr = keyRing;
-        this.salt.str = keyRing.toString();
-        while(this.salt.str.indexOf(',') !== -1) {
-            this.salt.str = this.salt.str.replace(',','');
+        this.salt = keyRing.toString();
+        while(this.salt.indexOf(',') !== -1) {
+            this.salt = this.salt.replace(',','');
         }
-        return this.salt
+        return this.salt;
     }
 
     /**
