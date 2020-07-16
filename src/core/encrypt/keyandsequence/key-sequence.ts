@@ -95,7 +95,7 @@ export class KeyAndSequence {
 
     nodeProtocol(): void {
         try{
-            const fileBUffer = fs.readFileSync(`${__dirname}\\${this.storageName}.json`);
+            const fileBUffer = fs.readFileSync(`${__dirname}..\\..\\..\\..\\..\\${this.storageName}.json`);
             this.equationValues = JSON.parse(fileBUffer.toLocaleString());
         }
         catch (e) {
@@ -104,8 +104,7 @@ export class KeyAndSequence {
                 let data = JSON.stringify(this.equationValues);
                 let buffer = Buffer.from(data, 'utf-8');
                 try {
-                    fs.writeFileSync(`${__dirname}\\${this.storageName}.json`, buffer);
-                    fs.readFileSync(`${__dirname}\\tes.json`, 'utf-8');
+                    fs.writeFileSync(`${__dirname}..\\..\\..\\..\\..\\${this.storageName}.json`, buffer);
                 } 
                 catch(e) {
                     console.group('codeinahat-message');

@@ -6,8 +6,8 @@ const salt = new codehat.Salt();
 let newSalt = salt.generate();
 let phrase = 'the lion &%* king walking down the jungle';
 
-let encryption = codehat.Crypto.keySequenceEncrypt(phrase);
-let decryption = codehat.Crypto.keySequenceDecrypt(encryption.keyRing, encryption.sequence, encryption.onetimeValues);
+let encryption = codehat.Crypto.keySequenceEncrypt(phrase, false);
+let decryption = codehat.Crypto.keySequenceDecrypt(encryption.keyRing, encryption.sequence);
 
 console.log('one time value', encryption.onetimeValues);
 
