@@ -1,4 +1,5 @@
 import { KeyAndSequence, KeyAndSequenceResult } from './keyandsequence/key-sequence';
+import { threadId } from 'worker_threads';
 export class Crypto {
     static keySequence: KeyAndSequence;
     constructor() {}
@@ -17,5 +18,13 @@ export class Crypto {
             onetimepadValues :
             this.keySequence.equationValues;
         return this.keySequence.decrypt(keyRing, sequence, onetimepadValues);
+    }
+    static deleteKeySequenceFileStorage(): boolean {
+        this.keySequence = new KeyAndSequence();
+        return this.keySequence.deleteFile();
+    }
+    static deleteKeyDir(): boolean {
+        this.keySequence = new KeyAndSequence();
+        return this.keySequence.deleteDir();
     }
 }

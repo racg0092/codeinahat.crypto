@@ -3,6 +3,7 @@ import  * as fs from 'fs';
 
 export class KeyAndSequence {
     equationValues: number[] = [];
+    path = `${__dirname}\\..\\..\\..\\..\\..\\..\\keys`;
     storageName = 'codehat-crypto-keySequenceValues';
     onetimepad = true;
     constructor(ontimepad?: boolean) {
@@ -17,7 +18,7 @@ export class KeyAndSequence {
     newEquationValues(): void {
         let count = 0;
         while (count < 3) {
-            this.equationValues.push(Math.floor((Math.random() * 1) * 30));
+            this.equationValues.push(Math.floor((Math.random() * 30) + 1));
             count++;
         }
     } 
@@ -94,8 +95,13 @@ export class KeyAndSequence {
     }
 
     nodeProtocol(): void {
+        if(this.checkKeysDir()) {
+            this.checkKeysFile();
+        }
+    }
+    checkKeysFile(): void {
         try{
-            const fileBUffer = fs.readFileSync(`${__dirname}..\\..\\..\\..\\..\\${this.storageName}.json`);
+            const fileBUffer = fs.readFileSync(`${this.path}\\${this.storageName}.json`);
             this.equationValues = JSON.parse(fileBUffer.toLocaleString());
         }
         catch (e) {
@@ -104,7 +110,7 @@ export class KeyAndSequence {
                 let data = JSON.stringify(this.equationValues);
                 let buffer = Buffer.from(data, 'utf-8');
                 try {
-                    fs.writeFileSync(`${__dirname}..\\..\\..\\..\\..\\${this.storageName}.json`, buffer);
+                    fs.writeFileSync(`${this.path}\\${this.storageName}.json`, buffer);
                 } 
                 catch(e) {
                     console.group('codeinahat-message');
@@ -113,6 +119,58 @@ export class KeyAndSequence {
                     console.groupEnd();
                 }
             }
+        }
+    }
+    checkKeysDir(): boolean {
+        try{
+            const dir = fs.readdirSync(`${this.path}`);
+            return true;
+        }
+        catch(e){
+            if(e.message.indexOf('no such file or directory') !== -1) {
+                try{
+                    fs.mkdirSync(`${this.path}`)
+                    return true;
+                }
+                catch(e){
+                    console.group('codeinahat-message');
+                    console.error('Error while attemting to create key directory');
+                    console.error(e.message);
+                    console.groupEnd();
+                    return false;
+                }
+            }
+            return false;
+        }
+    }
+    deleteFile(): boolean {
+        try
+        {
+            const dir = fs.readdirSync(this.path);
+            if(dir.length > 0) 
+            {
+                for(let item of dir) {
+                    if (item === `${this.storageName}.json`){
+                        fs.unlinkSync(`${this.path}\\${this.storageName}.json`);
+                        break;
+                    }
+                }
+            }
+            return true;
+        }
+        catch(e) {
+            console.log(e.message);
+            return false;
+        }
+    }
+    deleteDir(): boolean {
+        try {
+            fs.rmdirSync(this.path);
+            return true;
+        }
+        catch(e) {
+            console.log(e.message);
+            return false;
         }
     }
 }
