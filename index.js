@@ -1,6 +1,6 @@
 const codehat = require('./dist')
 
-const salt = new codehat.Salt();
+/*const salt = new codehat.Salt();
 
 
 let newSalt = salt.generate();
@@ -19,6 +19,6 @@ let yo = new codehat.KeyAndSequence();
 let yes = new codehat.KeyAndSequenceResult();
 
 codehat.Crypto.deleteKeyDir();
-codehat.Crypto.deleteKeySequenceFileStorage()
-codehat.Utilities.characterNumber(5);
+codehat.Crypto.deleteKeySequenceFileStorage()*/
+console.log(codehat.Utilities.characterNumber(5));
 
