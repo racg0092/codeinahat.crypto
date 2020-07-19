@@ -1,10 +1,11 @@
 import { Utilities } from './utilities';
-import { Crypto } from './encrypt/cryptor';
-import {KeyAndSequence, KeyAndSequenceResult} from './encrypt/keyandsequence/key-sequence';
+import { Crypto } from './encryptions/cryptor';
+import {KeyAndSequence, KeyAndSequenceResult, StorageMethod} from './encryptions/keyandsequence/key-sequence';
 
 export {
     Utilities,
     Crypto,
     KeyAndSequence,
-    KeyAndSequenceResult
+    KeyAndSequenceResult,
+    StorageMethod
 }

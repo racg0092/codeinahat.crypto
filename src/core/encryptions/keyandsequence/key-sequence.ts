@@ -1,4 +1,5 @@
 import { isBrowser, isNode } from 'browser-or-node';
+import { DatabaseServer } from '../../../db/server';
 import  * as fs from 'fs';
 
 export class KeyAndSequence {
@@ -6,7 +7,9 @@ export class KeyAndSequence {
     path = `${__dirname}\\..\\..\\..\\..\\..\\..\\keys`;
     storageName = 'codehat-crypto-keySequenceValues';
     onetimepad = true;
-    constructor(ontimepad?: boolean) {
+    storageMethod: StorageMethod;
+    constructor(ontimepad?: boolean, storageMethod?: {method: string; database?: string, collection?: string}) {
+        this.storageMethod = storageMethod;
         if (ontimepad !== undefined) this.onetimepad = ontimepad;
         if (!this.onetimepad) {
             if (isBrowser) this.browserProtocol(); 
@@ -95,9 +98,39 @@ export class KeyAndSequence {
     }
 
     nodeProtocol(): void {
-        if(this.checkKeysDir()) {
-            this.checkKeysFile();
+        if (this.storageMethod === undefined) {
+            if(this.checkKeysDir()) {
+                this.checkKeysFile();
+            }
+        } 
+        else {
+            if (this.storageMethod.method === 'file') {
+                if(this.checkKeysDir()) {
+                    this.checkKeysFile();
+                }
+            } 
         }
+    }
+    async databaseProtocol(): Promise<boolean> {
+        const mongoClient = new DatabaseServer(this.storageMethod.connectionString);
+        const server = await mongoClient.connect();
+        const database = this.storageMethod.database === undefined ?
+            server.db('encryption') :
+            server.db(this.storageMethod.database);
+        const collection = this.storageMethod.collection === undefined ?
+            database.collection('keys') :
+            database.collection(this.storageMethod.collection);
+        let result = await collection.findOne({_id: 'KeyAndSequence'});
+        if(result !== null) {
+            this.equationValues = result['keys'];
+            return true;
+        } 
+        else {
+            this.newEquationValues();
+            result  = await collection.insertOne({_id:'KeyAndSequence', keys: this.equationValues});
+            return true;
+        }
+        return false;
     }
     checkKeysFile(): void {
         try{
@@ -180,4 +213,11 @@ export class KeyAndSequenceResult {
     keyRing: any[];
     sequence: string[];
     onetimeValues?: number[];
+}
+
+export class StorageMethod {
+    method: string; 
+    database?: string; 
+    collection?: string;
+    connectionString?: string;
 }
