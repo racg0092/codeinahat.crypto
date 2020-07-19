@@ -123,14 +123,18 @@ export class KeyAndSequence {
         let result = await collection.findOne({_id: 'KeyAndSequence'});
         if(result !== null) {
             this.equationValues = result['keys'];
+            server.close();
             return true;
         } 
         else {
             this.newEquationValues();
             result  = await collection.insertOne({_id:'KeyAndSequence', keys: this.equationValues});
-            return true;
+            if(result.insertedCount > 0) {
+                return true;
+            }
+            server.close();
+            return false;
         }
-        return false;
     }
     checkKeysFile(): void {
         try{
